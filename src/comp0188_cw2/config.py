@@ -8,6 +8,9 @@ if project_options.collab:
     ROOT_PATH = "/content/drive/MyDrive/comp0188_2425/cw2"    
 else:
     ROOT_PATH = "../data/all_play_data_diverse"
+
+if not os.path.exists(ROOT_PATH):
+    raise Exception(f"You need to create the file path: {ROOT_PATH}")
     
 FILE_PATH = os.path.join(ROOT_PATH, "all_play_data_diverse.h5")
 
