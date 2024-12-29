@@ -7,7 +7,7 @@ WANDB_PROJECT = "cw2_v2"
 if project_options.collab:
     ROOT_PATH = "/content/drive/MyDrive/comp0188_2425/cw2"    
 else:
-    ROOT_PATH = "../data/all_play_data_diverse"
+    ROOT_PATH = "/cs/student/projects1/aibh/2024/gcosta/dlcw2/all_play_data_diverse"
 
 if not os.path.exists(ROOT_PATH):
     raise Exception(f"You need to create the file path: {ROOT_PATH}")

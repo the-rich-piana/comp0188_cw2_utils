@@ -128,7 +128,7 @@ def train(
         })
 
         if scheduler:
-            scheduler.step()
+            scheduler.step(epoch_val_loss)
 
         chkp_pth = os.path.join(save_dir, "mdl_chkpnt_epoch_{}.pt".format(
             epoch))
@@ -261,13 +261,15 @@ class TorchTrainingLoop:
         wandb_name:Optional[str] = None,
         wandb_grp:Optional[str] = None,
         reset_kwargs:Optional[Dict[str,Any]] = {},
-        reset_model:bool = True
+        reset_model:bool = True,
+        save_artifacts:bool = False  # Add this parameter    
         ) -> WandBMetricOrchestrator:
       wandb.init(
           project=wandb_proj,
           config=wandb_config,
           group=wandb_grp,
-          name=wandb_name
+          name=wandb_name,
+          dir='/cs/student/projects1/aibh/2024/gcosta/dlcw2/'
           )
       torch.manual_seed(1)
       if reset_model:
@@ -304,11 +306,12 @@ class TorchTrainingLoop:
         output_dir=self.output_dir
       )
       chckpnt_files = [f for f in os.listdir(chkpnt_dh.loc) if f[-3:]==".pt"]
-      for i in chckpnt_files:
-        artifact = wandb.Artifact(
-            name=f"{wandb_name}-{i}", type='checkpoint'
-            )
-        artifact.add_file(os.path.join(chkpnt_dh.loc, i))
-        wandb.log_artifact(artifact)
+      if save_artifacts:
+        for i in chckpnt_files:
+            artifact = wandb.Artifact(
+                name=f"{wandb_name}-{i}", type='checkpoint'
+                )
+            artifact.add_file(os.path.join(chkpnt_dh.loc, i))
+            wandb.log_artifact(artifact)
       wandb.finish()
       return mo
